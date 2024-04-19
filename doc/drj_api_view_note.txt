@@ -1,0 +1,142 @@
+
+NOTED:
+   - pip freeze > requirements.txt : copy all module installed into file requirements
+   - pip install -r requirements.txt: install module from file requirements
+
+Docker:
+   - docker-compose up -d : build and run docker container
+   - docker-compose up --build -d : re-build existing container and run docker container
+
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Appraisal
+from .serializer import AppraisalSerializer
+
+# -------------------------------------
+#  API_VIEW
+# -------------------------------------
+@api_view(['GET'])
+def ApiOverview(request):
+	api_urls = {
+		'all_items': '/',
+		'Search by Category': '/?category=category_name',
+		'Search by Subcategory': '/?subcategory=category_name',
+		'Add': '/create',
+		'Update': '/update/pk',
+		'Delete': '/item/pk/delete'
+	}
+
+	return Response(api_urls)
+
+
+@api_view(['GET'])
+def list_all(request):
+    # checking for the parameters from the URL
+   # print(request)
+   # return Response(request.query_params)
+   list_data = Appraisal.objects.all()
+   serializer = AppraisalSerializer(list_data, many=True)
+   return Response({
+      'success': True,
+      'status': 200,
+      'message': 'List all appraisal records',
+      'data': serializer.data
+   })
+
+
+# -------------------------------------
+#  ViewSet
+# -------------------------------------
+from rest_framework import viewsets, status
+from blogs.models import BlogModel
+from blogs.serializers import BlogSerializer
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+class BlogViewSets(viewsets.ViewSet):
+    def list(self, request):
+        queryset = BlogModel.objects.all()
+        serializer = BlogSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    # Return one blog item
+    def retrieve(self, request, pk=None):
+        queryset = BlogModel.objects.all()
+        if pk is not None:
+            blog = get_object_or_404(queryset, pk=pk)
+            serializer = BlogSerializer(blog)
+            return Response(serializer.data)
+
+# -------------------------------------
+#  ModelViewSet
+# -------------------------------------
+class BlogModelViewSets(viewsets.ModelViewSet):
+    queryset = BlogModel.objects.all()
+    serializer_class = BlogSerializer
+
+
+# -------------------------------------
+#  APIView
+# -------------------------------------
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from blogs.models import BlogModel
+from blogs.serializers import BlogSerializer
+
+class BlogAPIView(APIView):
+
+   def get(self, request):
+      blogs = BlogModel.objects.all()
+      serializer = BlogSerializer(blogs, many=True)
+      return Response({
+         'success': True,
+         'data': serializer.data
+      })
+
+   def post(self, request, *args, **kwargs):
+      if request.data.get('title') != '':
+         serializer = BlogSerializer(data=request.data)
+         if serializer.is_valid():
+               serializer.save()
+               return Response({
+               'success': True,
+               'message': 'APIView: post request fulfilled',
+               'data': serializer.data
+         })
+
+   def put(self, request, *args, **kwargs):
+      if request.data.get('id') is not None:
+         blog = BlogModel.objects.get(pk=request.data.get('id'))
+         if blog:
+            serializer = BlogSerializer(blog, data=request.data)
+            
+            if serializer.is_valid():
+               serializer.save()
+               return Response({
+                     'success': True,
+                     'message': 'APIView: updated blog post',
+                     'data': serializer.data
+               })
+
+      return Response({
+         'success': True,
+         'message': 'APIView: put request fulfilled',
+         'data': ''
+      })
+
+   def delete(self, request, *args, **kwargs):
+      if request.data.get('id') is not None:
+         blog = BlogModel.objects.get(pk=request.data.get('id'))
+         if blog:
+               blog.delete()
+               return Response({
+                  'success': True,
+                  'message': 'APIView: deleted blog post'
+               })
+      return Response({
+         'success': True,
+         'message': 'APIView: delete request fulfilled',
+         'data': ''
+      })

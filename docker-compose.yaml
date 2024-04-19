@@ -1,0 +1,66 @@
+version: "3.8"
+services:
+  api:
+    build: .
+    image: ftb_supportdesk_api
+    container_name: ftb_supportdesk_api
+    ports:
+      - "3001:3001" # "local_port:default_image_port"
+    volumes:
+      - .:/ftb_supportdesk_api #current_dir:default_image_dir
+    # command: python3 manage.py runserver 0.0.0.0:8001
+    environment:
+      - POSTGRES_NAME=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    links:
+      - db
+    depends_on:
+      - db
+    networks:
+      ftb_supportdesk_api_network:
+        ipv4_address: 192.168.2.2
+
+  db:
+    container_name: ftb_supportdesk_db
+    image: postgres
+    environment:
+      POSTGRES_DB: ftb_supportdesk_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "3002:5432"
+    restart: unless-stopped
+    networks:
+      ftb_supportdesk_api_network:
+        ipv4_address: 192.168.2.3
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: ftb_supportdesk_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: khaing.pho1991@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: pgadmin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - ./docker_data/pgadmin:/var/lib/pgadmin
+    ports:
+      - "3003:80"
+    restart: unless-stopped
+    networks:
+      ftb_supportdesk_api_network:
+        ipv4_address: 192.168.2.4
+
+volumes:
+  postgres:
+
+networks:
+  ftb_supportdesk_api_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.2.0/24 # from 192.168.0.(0-255)
+          gateway: 192.168.2.1
