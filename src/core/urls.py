@@ -61,11 +61,11 @@ urlpatterns = [
     # path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     # path("", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
     # path("redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
+    # path(
+    #     "swagger<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"
+    # ),
     path(
-        "swagger<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"
-    ),
-    path(
-        "",
+        "swagger/",
         schema_view.with_ui("swagger", cache_timeout=0),
         name="schema-swagger-ui",
     ),
@@ -128,7 +128,8 @@ urlpatterns = [
     path("api/v1/eleave/leave_summary/", include("app.eleave.leave_summary.urls")),
     path("api/v1/eleave/leave_balance/", include("app.eleave.leave_balance.urls")),
     path("api/v1/eleave/holiday/", include(holiday_urls)),
-    
+    path("api/v1/user_notification/", include("app.user_notification.urls")),
+    path("", include("django_prometheus.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

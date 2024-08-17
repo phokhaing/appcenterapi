@@ -298,7 +298,7 @@ class LeaveRequestViewSet(viewsets.ModelViewSet):
         user_logged = request.user
 
         employee = GlobalHelper.find_user_info_by_user_id(
-            int(request.data.get("employee"))
+            int(request.data.get("user_id"))
         )  # print('employee': ['1'])
 
         if not employee:
@@ -475,35 +475,40 @@ class LeaveRequestViewSet(viewsets.ModelViewSet):
                 total_time = display_hour + display_minute
 
                 # *** Send Mail *** #
-                template_title = email_template.title
-                template_message = email_template.message
-                message_body = {
-                    "[FROM_USER]": employee["full_name"],
-                    "[TO_USER]": certifier["full_name"],
-                    "[REQUESTOR]": employee["full_name"],
-                    "[SITE_URL]": settings.DOMAIN_WEB + url,
-                    "[SITE_NAME]": settings.SITE_NAME,
-                    "[STATUS]": status_name,
-                    "[LEAVE_TYPE]": leave_type.name,
-                    "[FROM_DATE]": request.data["start_date"],
-                    "[TO_DATE]": request.data["end_date"],
-                    "[FROM_TIME]": request.data["from_time"],
-                    "[TO_TIME]": request.data["to_time"],
-                    "[TOTAL_TIME]": total_time,
-                    "[REASON]": request.data["reason"],
-                }
-                user_template_message = template_message
-                # Replace the keywords in the user-specific message
-                for keyword, replacement in message_body.items():
-                    user_template_message = user_template_message.replace(
-                        keyword, replacement
-                    )
-                # send email inbound configuration
-                send_email_inbound(
-                    template_title, user_template_message, certifier["email"]
-                )
+                # template_title = email_template.title
+                # template_message = email_template.message
+                # message_body = {
+                #     "[FROM_USER]": employee["full_name"],
+                #     "[TO_USER]": certifier["full_name"],
+                #     "[REQUESTOR]": employee["full_name"],
+                #     "[SITE_URL]": settings.DOMAIN_WEB + url,
+                #     "[SITE_NAME]": settings.SITE_NAME,
+                #     "[STATUS]": status_name,
+                #     "[LEAVE_TYPE]": leave_type.name,
+                #     "[FROM_DATE]": request.data["start_date"],
+                #     "[TO_DATE]": request.data["end_date"],
+                #     "[FROM_TIME]": request.data["from_time"],
+                #     "[TO_TIME]": request.data["to_time"],
+                #     "[TOTAL_TIME]": total_time,
+                #     "[REASON]": request.data["reason"],
+                # }
+                # user_template_message = template_message
+                # # Replace the keywords in the user-specific message
+                # for keyword, replacement in message_body.items():
+                #     user_template_message = user_template_message.replace(
+                #         keyword, replacement
+                #     )
+                # # send email inbound configuration
+                # send_email_inbound(
+                #     template_title, user_template_message, certifier["email"]
+                # )
+
+                
             return Response(
-                {"message": "Leave request has been created"},
+                {
+                    "message": "Leave request has been created",
+                    "results": serializer.data,
+                },
                 status=status.HTTP_201_CREATED,
             )
         else:

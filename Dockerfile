@@ -1,14 +1,12 @@
 FROM python
 
-# WORKDIR .
-# COPY . ./ftb_supportdesk_api
-COPY . ./ftb_supportdesk_api
+COPY . ./appcenterapi
 
 RUN pip3 freeze > requirements.txt
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 
-WORKDIR /ftb_supportdesk_api/src
+WORKDIR /appcenterapi/src
 
 CMD python3 manage.py makemigrations \
    && python3 manage.py migrate \

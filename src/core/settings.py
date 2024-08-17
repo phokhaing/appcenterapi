@@ -2,7 +2,10 @@ from datetime import timedelta
 import os
 from pathlib import Path
 from decouple import config, Csv
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+SITE_NAME = "App Center"
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,7 +25,6 @@ PROJECT_APPS = [
     "app.position.apps.PositionConfig",
     "app.menu.apps.MenuConfig",
     "app.user_notification.apps.UserNotificationConfig",
-    
     # E-leave system
     "app.eleave.apps.EleaveConfig",  # main directory
     "app.eleave.leave_type.apps.LeaveTypeConfig",
@@ -44,6 +46,7 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "import_export",
+    "django_prometheus",
 ]
 
 THIRD_PARTY_APPS = [
@@ -84,7 +87,11 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # 'easyaudit.middleware.easyaudit.EasyAuditMiddleware',
+    "django_prometheus.middleware.PrometheusBeforeMiddleware",
+    # All your other middlewares go here, including the default
+    # middlewares like SessionMiddleware, CommonMiddleware,
+    # CsrfViewmiddleware, SecurityMiddleware, etc.
+    "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
 
 # configure override user
@@ -115,7 +122,7 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": ["templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -123,6 +130,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.static",
             ],
         },
     },
@@ -146,7 +154,6 @@ DATABASES = {
     #     "HOST": "192.168.2.3",
     #     "PORT": "5432",
     # }
-
     "default": {
         "ENGINE": config("DB_ENGINE"),
         "NAME": config("DB_NAME"),

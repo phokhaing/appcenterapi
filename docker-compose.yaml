@@ -2,12 +2,12 @@ version: "3.8"
 services:
   api:
     build: .
-    image: ftb_supportdesk_api
-    container_name: ftb_supportdesk_api
+    image: appcenterapi
+    container_name: appcenterapi
     ports:
       - "3001:3001" # "local_port:default_image_port"
     volumes:
-      - .:/ftb_supportdesk_api #current_dir:default_image_dir
+      - .:/appcenterapi #current_dir:default_image_dir
     # command: python3 manage.py runserver 0.0.0.0:8001
     environment:
       - POSTGRES_NAME=db
@@ -18,7 +18,7 @@ services:
     depends_on:
       - db
     networks:
-      ftb_supportdesk_api_network:
+      appcenterapi_network:
         ipv4_address: 192.168.2.2
 
   db:
@@ -35,7 +35,7 @@ services:
       - "3002:5432"
     restart: unless-stopped
     networks:
-      ftb_supportdesk_api_network:
+      appcenterapi_network:
         ipv4_address: 192.168.2.3
 
   pgadmin:
@@ -51,14 +51,14 @@ services:
       - "3003:80"
     restart: unless-stopped
     networks:
-      ftb_supportdesk_api_network:
+      appcenterapi_network:
         ipv4_address: 192.168.2.4
 
 volumes:
   postgres:
 
 networks:
-  ftb_supportdesk_api_network:
+  appcenterapi_network:
     driver: bridge
     ipam:
       config:

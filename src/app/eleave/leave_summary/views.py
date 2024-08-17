@@ -528,27 +528,27 @@ class LeaveSummaryController:
             email_hook = f"ELEAVE_LEAVE_REQUESTOR"
             status_name = f"Certified"
 
-            LeaveSummaryController.send_notification(
-                from_user["user_id"],
-                requestor["user_id"],
-                queryset.id,
-                module_data.id,
-                noti_message,
-                url,
-                queryset,
-                status_name,
-            )
+            # LeaveSummaryController.send_notification(
+            #     from_user["user_id"],
+            #     requestor["user_id"],
+            #     queryset.id,
+            #     module_data.id,
+            #     noti_message,
+            #     url,
+            #     queryset,
+            #     status_name,
+            # )
 
-            LeaveSummaryController.send_email(
-                from_user["user_id"],
-                requestor["user_id"],
-                queryset.id,
-                module_data.id,
-                url,
-                email_hook,
-                queryset,
-                status_name,
-            )
+            # LeaveSummaryController.send_email(
+            #     from_user["user_id"],
+            #     requestor["user_id"],
+            #     queryset.id,
+            #     module_data.id,
+            #     url,
+            #     email_hook,
+            #     queryset,
+            #     status_name,
+            # )
 
             # send mail and notification to user approval
             requestor_full_name = requestor["full_name"]
@@ -559,27 +559,27 @@ class LeaveSummaryController:
             email_hook_approve = f"ELEAVE_LEAVE_CERTIFY"
             status_name_approve = f"Approve"
 
-            LeaveSummaryController.send_notification(
-                from_user["user_id"],
-                user_approve["user_id"],
-                queryset.id,
-                module_data.id,
-                noti_message_approve,
-                url,
-                queryset,
-                status_name_approve,
-            )
+            # LeaveSummaryController.send_notification(
+            #     from_user["user_id"],
+            #     user_approve["user_id"],
+            #     queryset.id,
+            #     module_data.id,
+            #     noti_message_approve,
+            #     url,
+            #     queryset,
+            #     status_name_approve,
+            # )
 
-            LeaveSummaryController.send_email(
-                from_user["user_id"],
-                user_approve["user_id"],
-                queryset.id,
-                module_data.id,
-                url,
-                email_hook_approve,
-                queryset,
-                status_name_approve,
-            )
+            # LeaveSummaryController.send_email(
+            #     from_user["user_id"],
+            #     user_approve["user_id"],
+            #     queryset.id,
+            #     module_data.id,
+            #     url,
+            #     email_hook_approve,
+            #     queryset,
+            #     status_name_approve,
+            # )
 
             return ApiResponse.success(
                 message="Certified successfully.",
@@ -1026,27 +1026,27 @@ class LeaveSummaryController:
             email_hook = f"ELEAVE_LEAVE_APPROVE"
             status_name = f"Approved"
 
-            LeaveSummaryController.send_notification(
-                sender["user_id"],
-                receiver["user_id"],
-                queryset.id,
-                module_data.id,
-                noti_message,
-                url,
-                queryset,
-                status_name,
-            )
+            # LeaveSummaryController.send_notification(
+            #     sender["user_id"],
+            #     receiver["user_id"],
+            #     queryset.id,
+            #     module_data.id,
+            #     noti_message,
+            #     url,
+            #     queryset,
+            #     status_name,
+            # )
 
-            LeaveSummaryController.send_email(
-                sender["user_id"],
-                receiver["user_id"],
-                queryset.id,
-                module_data.id,
-                url,
-                email_hook,
-                queryset,
-                status_name,
-            )
+            # LeaveSummaryController.send_email(
+            #     sender["user_id"],
+            #     receiver["user_id"],
+            #     queryset.id,
+            #     module_data.id,
+            #     url,
+            #     email_hook,
+            #     queryset,
+            #     status_name,
+            # )
 
             return ApiResponse.success(
                 message="Approved successfully.",
@@ -1088,7 +1088,7 @@ class LeaveSummaryController:
         data = {
             "rejected_by": user.id,
             "rejected_at": datetime.now(),
-            "rejected_reason": request.data.get("reason"),
+            "rejected_reason": request.data.get("rejected_reason"),
             "leave_status": 4,  # status id rejected|Rejected
         }
         serializer = LeaveRequestRejectSerializer(
@@ -1105,27 +1105,27 @@ class LeaveSummaryController:
             email_hook = f"ELEAVE_LEAVE_REJECT"
             status_name = f"Rejected"
 
-            LeaveSummaryController.send_notification(
-                sender["user_id"],
-                receiver["user_id"],
-                queryset.id,
-                module_data.id,
-                noti_message,
-                url,
-                queryset,
-                status_name,
-            )
+            # LeaveSummaryController.send_notification(
+            #     sender["user_id"],
+            #     receiver["user_id"],
+            #     queryset.id,
+            #     module_data.id,
+            #     noti_message,
+            #     url,
+            #     queryset,
+            #     status_name,
+            # )
 
-            LeaveSummaryController.send_email(
-                sender["user_id"],
-                receiver["user_id"],
-                queryset.id,
-                module_data.id,
-                url,
-                email_hook,
-                queryset,
-                status_name,
-            )
+            # LeaveSummaryController.send_email(
+            #     sender["user_id"],
+            #     receiver["user_id"],
+            #     queryset.id,
+            #     module_data.id,
+            #     url,
+            #     email_hook,
+            #     queryset,
+            #     status_name,
+            # )
 
             return ApiResponse.success(
                 message="Rejected successfully.",
