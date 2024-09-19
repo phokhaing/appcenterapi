@@ -27,7 +27,7 @@ from ..utils.ApiResponse import ResponseSuccess, ResponseFail
 #  API_VIEW
 # -------------------------------------
 @api_view(["GET"])
-def ApiOverview(request):
+def api_overview(request):
    return Response(
       [
          "/api/appraisal",
