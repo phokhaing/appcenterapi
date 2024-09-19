@@ -21,7 +21,6 @@ class BranchFilter(filters.FilterSet):
    # min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
    # max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')
    
-   # ChoiceFilter
    # category = django_filters.ModelChoiceFilter(
    #    field_name='category', lookup_expr='isnull',
    #    null_label='Uncategorized',
